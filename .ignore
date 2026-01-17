@@ -1,0 +1,121 @@
+# ========================= 基础 Java 编译产物 =========================
+# 字节码文件（.class）
+*.class
+
+# Java 打包产物
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+*.rar
+
+# 编译输出目录（Maven/Gradle 通用）
+target/
+build/
+out/
+classes/
+dist/
+
+# ========================= 构建工具配置 =========================
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Gradle
+.gradle/
+gradle-wrapper.jar
+gradle-wrapper.properties
+gradlew
+gradlew.bat
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# ========================= IDE 配置文件 =========================
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+.metadata
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.factorypath
+.springBeans
+.sts4-cache/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# ========================= 运行时文件 =========================
+# 日志文件
+*.log
+logs/
+log/
+
+# 临时文件
+*.tmp
+*.temp
+*.swp
+.DS_Store
+Thumbs.db
+
+# 配置文件（敏感信息，如数据库密码、密钥等）
+*.properties
+!src/main/resources/application*.properties.template  # 保留模板文件
+!src/main/resources/bootstrap*.properties.template
+*.yml
+!src/main/resources/application*.yml.template
+!src/main/resources/bootstrap*.yml.template
+
+# 环境变量文件
+.env
+.env.local
+.env.*.local
+
+# ========================= 测试相关 =========================
+# 测试报告
+test-output/
+surefire-reports/
+failsafe-reports/
+*.surefire.html
+
+# JaCoCo 覆盖率报告
+jacoco/
+
+# ========================= 其他通用忽略 =========================
+# 本地缓存
+.cache/
+# 操作系统临时文件
+tmp/
+temp/
+# 备份文件
+*.bak
+*.backup
+# 编辑器临时文件
+*~
