@@ -50,7 +50,7 @@ public class UserUtil {
 //        System.out.println("插入成功");
 //        connection.close();
 //        System.out.println("放入数据库");
-        String urlString = "http://localhost:8080/login/doLogin";
+        String urlString = "http://localhost:8088/login/doLogin";
         File file = new File("D:\\java\\config.txt");
         if (file.exists()) {
             file.delete();

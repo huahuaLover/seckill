@@ -34,7 +34,6 @@ import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.beans.Transient;
@@ -69,6 +68,8 @@ public class SecKillController implements InitializingBean {
     OrderMapper orderMapper;
     @Autowired
     SeckillOrderMapper seckillOrderMapper;
+    //活动时间30分钟
+    private static final int TTL_TIME = 30*60;
     private Map<Long,Boolean> EmptyStockMap = new HashMap<>();
     @PostMapping("/doSeckillOnePeopleOneOrder")
     @ResponseBody
@@ -261,24 +262,16 @@ public class SecKillController implements InitializingBean {
         {
             return RespBean.error(RespBeanEnum.User_ERROR);
         }
-
         //内存标记,减少redis的访问
         if(EmptyStockMap.get(goodsId))
         {
             return RespBean.error(RespBeanEnum.EMPTY_STOCK);
         }
-        String orderKey = "order:"+subject.getId()+":"+goodsId;
         String storeKey = "seckillGoods:"+goodsId;
-        //判断是否重复抢购
-        Object seckillOrderObject = redisTemplate.opsForValue().get("order:"+subject.getId()+":"+goodsId);
-        if(seckillOrderObject!=null)
-        {
-            return RespBean.error(RespBeanEnum.REPEAT_ERROR);
-        }
-        //通过 Redis 执行一段 Lua 脚本，并返回一个 Long 类型的结果，进行原子性的减库存操作
-        //Long result =(Long) redisTemplate.execute(script, Arrays.asList(storeKey,orderKey),Collections.EMPTY_LIST);
-        Long result =(Long) redisTemplate.execute(script, Arrays.asList(storeKey),Collections.EMPTY_LIST);
-        if(result==-1)
+        String orderKey = "order:"+goodsId;
+        //key是商品维度的，value是用户id，存入的是Set
+        Long result =(Long) redisTemplate.execute(script, Arrays.asList(storeKey,orderKey),subject.getId(),TTL_TIME);
+        if(result == -1)
         {
             EmptyStockMap.put(goodsId,true);
             return RespBean.error(RespBeanEnum.EMPTY_STOCK);
