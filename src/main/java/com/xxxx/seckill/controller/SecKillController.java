@@ -268,12 +268,6 @@ public class SecKillController implements InitializingBean {
             return RespBean.error(RespBeanEnum.EMPTY_STOCK);
         }
         String storeKey = "seckillGoods:"+goodsId;
-        Object seckillOrderObject = redisTemplate.opsForValue().get("order:"+subject.getId()+":"+goodsId);
-        if(seckillOrderObject!=null)
-        {
-            return RespBean.error(RespBeanEnum.REPEAT_ERROR);
-        }
-        //这边就是进行lua，判断库存是否充足
         Long result =(Long) redisTemplate.execute(script, Arrays.asList(storeKey),Collections.EMPTY_LIST);
         if(result==-1)
         {

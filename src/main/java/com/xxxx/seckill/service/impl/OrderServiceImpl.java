@@ -88,7 +88,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 System.out.println(insert);
                 System.out.println("huahua");
                 //在redis中生成订单
-                redisTemplate.opsForValue().set("order:"+userId+":"+goods.getId(), JsonUtil.object2JsonStr(seckillOrder),50, TimeUnit.MINUTES);
+                redisTemplate.opsForValue().set("order:"+userId+":"+goods.getId(), JsonUtil.object2JsonStr(seckillOrder),50, TimeUnit.SECONDS);
                 return order;
     }
 

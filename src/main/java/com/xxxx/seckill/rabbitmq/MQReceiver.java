@@ -73,22 +73,10 @@ public class MQReceiver {
     public void receive(String message)
     {
         log.info("QUEUE接收消息"+message);
-        //首先先判断库存和是否重复购买
         SeckillMessage msg = JsonUtil.jsonStr2Object(message,SeckillMessage.class);
         Long goodsId = msg.getGoodsId();
         String userId = msg.getUserId();
         GoodsVo goods = goodsService.findGoodsVoById(goodsId);
-        //再次进行判断,进来时库存是有的,现在不知道有没有?
-//        if(goods.getStockCount()<1)
-//        {
-//            return;
-//        }
-        //判断是否重新购买,之前也是判断过了
-        String seckillOrderJson = (String) redisTemplate.opsForValue().get("order:"+userId+":"+goodsId);
-        if(seckillOrderJson!=null)
-        {
-            return;
-        }
         orderService.seckill(userId,goods);
     }
 
