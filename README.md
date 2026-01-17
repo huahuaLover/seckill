@@ -1,0 +1,1 @@
+一人一单时redis使用set集合，key是goodsId维度的，value是userId，其次有效时间，设置为活动时间，不需要再额外删除键了，还是采用lua脚本，原子化操作
