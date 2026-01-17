@@ -267,25 +267,18 @@ public class SecKillController implements InitializingBean {
         {
             return RespBean.error(RespBeanEnum.EMPTY_STOCK);
         }
-        String orderKey = "order:"+subject.getId()+":"+goodsId;
         String storeKey = "seckillGoods:"+goodsId;
-        //判断是否重复抢购
         Object seckillOrderObject = redisTemplate.opsForValue().get("order:"+subject.getId()+":"+goodsId);
         if(seckillOrderObject!=null)
         {
             return RespBean.error(RespBeanEnum.REPEAT_ERROR);
         }
-        //通过 Redis 执行一段 Lua 脚本，并返回一个 Long 类型的结果，进行原子性的减库存操作
-        //Long result =(Long) redisTemplate.execute(script, Arrays.asList(storeKey,orderKey),Collections.EMPTY_LIST);
+        //这边就是进行lua，判断库存是否充足
         Long result =(Long) redisTemplate.execute(script, Arrays.asList(storeKey),Collections.EMPTY_LIST);
         if(result==-1)
         {
             EmptyStockMap.put(goodsId,true);
             return RespBean.error(RespBeanEnum.EMPTY_STOCK);
-        }
-        else if(result == -2)
-        {
-            return RespBean.error(RespBeanEnum.REPEAT_ERROR);
         }
         log.info("ready to send rabbit mq message");
         SeckillMessage seckillMessage = new SeckillMessage(subject.getId(),goodsId);
